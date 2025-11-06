@@ -21,8 +21,6 @@ class ContactsDetailsScreen extends StatelessWidget {
             _avatar,
             if (_contact.phones.isNotEmpty) _phonesCard,
             if (_contact.location != null) _locationCard,
-            if (_contact.department?.facultyName != null &&
-                _contact.department?.depName != null)
               _departmentCard,
           ],
         ),
@@ -38,7 +36,7 @@ class ContactsDetailsScreen extends StatelessWidget {
           radius: 50,
           child: _contact.picture == null
               ? Icon(Icons.person, size: 60)
-              : ContactAvatar(picturePath: _contact.picture!),
+              : ClipOval(child: ContactAvatar(picturePath: _contact.picture!)),
         ),
         Spacer(),
       ],
@@ -106,43 +104,49 @@ class ContactsDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 8,
           children: [
-            Text(
+            _departmentSubview(
               'Department',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
+              _contact.department?.depName,
+              _contact.department?.depUrl,
             ),
-            if (_contact.department?.depName != null)
-              Row(
-                children: [
-                  Expanded(child: Text(_contact.department!.depName!)),
-                  if (_contact.department?.depUrl != null)
-                    ElevatedButton(
-                      onPressed: () =>
-                          _openWebsite(_contact.department!.depUrl!),
-                      child: Icon(Icons.link),
-                    ),
-                ],
-              ),
-            if (_contact.department?.facultyName != null) SizedBox(height: 16),
-            Text(
+            _departmentSubview(
+              'Section',
+              _contact.department?.sectionName,
+              _contact.department?.sectionUrl,
+            ),
+            _departmentSubview(
               'Faculty',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
-            ),
-            Row(
-              children: [
-                Expanded(child: Text(_contact.department!.facultyName!)),
-                if (_contact.department?.facultyUrl != null)
-                  ElevatedButton(
-                    onPressed: () =>
-                        _openWebsite(_contact.department!.facultyUrl!),
-                    child: Icon(Icons.link),
-                  ),
-              ],
+              _contact.department?.facultyName,
+              _contact.department?.facultyUrl,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _departmentSubview(String viewTitle, String? title, String? url) {
+    if (title == null) return Container();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          viewTitle,
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.left,
+        ),
+        Row(
+          children: [
+            Expanded(child: Text(title)),
+            if (url != null)
+              ElevatedButton(
+                onPressed: () => _openWebsite(url),
+                child: Icon(Icons.link),
+              ),
+          ],
+        ),
+        SizedBox(height: 16)
+      ],
     );
   }
 

@@ -30,7 +30,9 @@ class ContactCard extends StatelessWidget {
                 radius: 28,
                 child: _contact.picture == null
                     ? const Icon(Icons.person, size: 32)
-                    : ContactAvatar(picturePath: _contact.picture!),
+                    : ClipOval(
+                  child: ContactAvatar(picturePath: _contact.picture!),
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
