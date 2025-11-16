@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ContactsProvider extends ChangeNotifier {
   final ContactsRepo _repo;
 
-  ContactsProvider({ required ContactsRepo repo }) : _repo = repo;
+  ContactsProvider({required ContactsRepo repo}) : _repo = repo;
   List<Contact> _contacts = [];
   List<String> _searchHistory = [];
   String? _searchText;
@@ -23,8 +23,10 @@ class ContactsProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  void searchContactBy({ required String name }) {
+  void searchContactBy({required String name}) {
+    _isLoading = true;
     _searchText = name;
+    notifyListeners();
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       _search(name);
@@ -50,6 +52,7 @@ class ContactsProvider extends ChangeNotifier {
 
   Future<void> _search(String name) async {
     if (name.length < 3) {
+      _isLoading = false;
       _contacts = [];
       notifyListeners();
       return;
@@ -57,7 +60,6 @@ class ContactsProvider extends ChangeNotifier {
 
     _addHistory(name);
     final currentRequestId = ++_latesRequestId;
-    _isLoading = true;
     _error = null;
     notifyListeners();
 
@@ -85,5 +87,4 @@ class ContactsProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('search_history', _searchHistory);
   }
-
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_assignment/core/models/contact.dart';
+import 'package:home_assignment/core/utils/logger_helper.dart';
 import 'package:home_assignment/widgets/contact_avatar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,7 +22,7 @@ class ContactsDetailsScreen extends StatelessWidget {
             _avatar,
             if (_contact.phones.isNotEmpty) _phonesCard,
             if (_contact.location != null) _locationCard,
-              _departmentCard,
+            _departmentCard,
           ],
         ),
       ),
@@ -145,7 +146,7 @@ class ContactsDetailsScreen extends StatelessWidget {
               ),
           ],
         ),
-        SizedBox(height: 16)
+        SizedBox(height: 16),
       ],
     );
   }
@@ -153,7 +154,9 @@ class ContactsDetailsScreen extends StatelessWidget {
   void _openWebsite(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      await launchUrl(uri, mode: LaunchMode.platformDefault);
+    } else {
+      logger.e("Can't open url $url");
     }
   }
 

@@ -3,14 +3,9 @@ import 'package:home_assignment/app/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:home_assignment/features/contacts/provider/contacts_provider.dart';
 
-class SearchHistoryScreen extends StatefulWidget {
+class SearchHistoryScreen extends StatelessWidget {
   const SearchHistoryScreen({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _SearchHistoryState();
-}
-
-class _SearchHistoryState extends State<SearchHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final contactsProvider = context.watch<ContactsProvider>();
